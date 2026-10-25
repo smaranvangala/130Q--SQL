@@ -1,0 +1,15 @@
+Stage - 1
+
+SELECT customer_name, city
+FROM customers;
+
+SELECT *
+FROM customers
+WHERE city = 'Seattle'
+ORDER BY signup_date DESC, customer_id ASC;
+
+SELECT order_id, customer_id, total_amount
+FROM orders
+WHERE status = 'completed' AND total_amount > 5000
+ORDER BY total_amount DESC;
+
