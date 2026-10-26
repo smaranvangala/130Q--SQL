@@ -13,3 +13,56 @@ FROM orders
 WHERE status = 'completed' AND total_amount > 5000
 ORDER BY total_amount DESC;
 
+SELECT customer_id, customer_name, email
+FROM customers
+WHERE email IS NULL OR email = ' ';
+
+SELECT customer_id,customer_name
+FROM customers
+WHERE customer_name ILIKE 'A%'
+
+SELECT order_id, total_amount,
+      CASE
+      WHEN total_amount >= 5000 THEN 'High'
+      WHEN total_amount >= 1000 THEN 'Medium'
+      WHEN total_amount < 1000 THEN 'Low'
+      END AS order_quant
+FROM orders;
+
+SELECT customer_id, customer_name,
+       COALESCE(city, 'unknown') AS city_name,
+       COALESCE(NULLIF(email,''), 'Not Provided') AS email
+FROM customers;
+
+SELECT customer_id, customer_name,email, signup_date
+FROM customers
+WHERE EXTRACT(YEAR FROM signup_date) = 2026 AND NULLIF(TRIM(email),'') IS NOT NULL;
+
+SELECT transaction_id, transaction_type, amount,
+		CASE
+		WHEN transaction_type = 'Deposit' THEN amount
+		WHEN transaction_type = 'Withdrawal' THEN -amount
+		END AS signed_amount
+FROM transactions;
+
+WITH cleaned_customers AS (
+    SELECT
+        customer_id,
+        NULLIF(TRIM(customer_name), '') AS customer_name,
+        NULLIF(TRIM(email), '') AS email,
+        NULLIF(TRIM(city), '') AS city
+    FROM customers
+)
+SELECT
+    customer_id,
+    customer_name,
+    email,
+    city,
+    CASE
+        WHEN customer_name IS NOT NULL
+         AND email IS NOT NULL
+         AND city IS NOT NULL
+        THEN 'Complete'
+        ELSE 'Incomplete'
+    END AS profile_status
+FROM cleaned_customers;
