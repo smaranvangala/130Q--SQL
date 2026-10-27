@@ -66,3 +66,5 @@ SELECT
         ELSE 'Incomplete'
     END AS profile_status
 FROM cleaned_customers;
+
+Stage 2
